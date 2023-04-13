@@ -52,6 +52,7 @@ pipeline {
             steps {
                 script{echo 'testing the application'
                     //sh 'mvn test'}
+                }
             }
         }
         stage('deploy') {
@@ -64,33 +65,16 @@ pipeline {
 //
 //            }
             steps {
-                script{echo 'deploying the application'
+                script{
+                    echo 'deploying the application'
                     withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
                         sh "echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin"
                         sh "docker push bhoomildayani182/exam:examimage"
-                    }}
+                    }
+                }
 
             }
         }
-//        stage('commit version update'){
-//            steps{
-//                script{
-//                    withCredentials([usernamePassword(credentialsId: 'git-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-//                        sh 'git config --global user.email "jenkins@example.com"'
-//                        sh 'git config --global user.name "jenkins"'
-//
-//                        sh 'git status'
-//                        sh 'git branch'
-//                        sh 'git config --list'
-//
-//                        sh "git remote set-url origin https://${USERNAME}:${PASSWORD}@github.com/bhoomildayani182/springboot-jenkins.git"
-//                        sh 'git add .'
-//                        sh 'git commit -m "version change"'
-//                        sh 'git push origin HEAD:jenkins-jobs'
-//                    }
-//                }
-//            }
-//        }
     }
     post{
         always{
