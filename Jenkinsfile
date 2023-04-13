@@ -41,7 +41,6 @@ pipeline {
                     //def version = (readFile('pom.xml') =~ '<version>(.+)</version>')[0][2]
                     env.IMAGE_NAME = "$version-$BUILD_NUMBER"
                     sh "docker build -t jd09/exam:${IMAGE_NAME} ."
-
                     }
             }
         }
@@ -104,5 +103,4 @@ pipeline {
         failure{
             echo 'Executing failure'
         }
-    }
 }
