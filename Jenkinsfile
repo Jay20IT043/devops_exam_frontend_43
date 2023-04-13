@@ -1,6 +1,7 @@
 pipeline {
     agent any
     environment {
+        IMAGE_NAME= 'jd09/devops_prac_exam-app:6.3'
         NEW_VERSION = '1.3'
     }
 
@@ -38,7 +39,7 @@ pipeline {
                     //sh 'mvn clean package'
                     //def version = (readFile('pom.xml') =~ '<version>(.+)</version>')[0][2]
                     //env.IMAGE_NAME = "$version-$BUILD_NUMBER"
-                    sh "docker build -t jd09/exam:front_examimage ."
+                    sh "docker build -t jd09/devops_prac_exam-app:6.3 ."
 
                 }
             }
@@ -69,7 +70,7 @@ pipeline {
                     echo 'deploying the application'
                     withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
                         sh "echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin"
-                        sh "docker push jd09/exam:examimage"
+                        sh "docker push jd09/devops_prac_exam-app:6.3"
                     }
                 }
 
