@@ -1,5 +1,3 @@
-#!/usr/bin/env groovy
-
 pipeline {
     agent any
     environment {
@@ -14,7 +12,7 @@ pipeline {
     tools{
         maven 'package'
     }
-
+}
     stages {
         stage('init'){
             steps{
@@ -41,20 +39,20 @@ pipeline {
                     //def version = (readFile('pom.xml') =~ '<version>(.+)</version>')[0][2]
                     env.IMAGE_NAME = "$version-$BUILD_NUMBER"
                     sh "docker build -t jd09/exam:${IMAGE_NAME} ."
-                    }
+                }
             }
         }
-      stage('test') {
+        stage('test') {
           when{
              expression{
                  params.executeTest
-             }
-          }
-            steps {
-                script{echo 'testing the application'
-                //sh 'mvn test'}
             }
-        }
+          }
+          steps {
+                  script{echo 'testing the application'
+                //sh 'mvn test'}
+                }
+          }
       stage('deploy') {
         input{
             message "Select the environment to deploy"
@@ -73,27 +71,7 @@ pipeline {
 
              }
         }
-//         stage('commit version update'){
-//             steps{
-//                 script{
-//                     withCredentials([usernamePassword(credentialsId: 'git-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-//                         sh 'git config --global user.email "jenkins@example.com"'
-//                         sh 'git config --global user.name "jenkins"'
-//
-//                         sh 'git status'
-//                         sh 'git branch'
-//                         sh 'git config --list'
-//
-//                         sh "git remote set-url origin https://${USERNAME}:${PASSWORD}@github.com/bhoomildayani182/springboot-jenkins.git"
-//                         sh 'git add .'
-//                         sh 'git commit -m "version change"'
-//                         sh 'git push origin HEAD:jenkins-jobs'
-//                     }
-//                 }
-//             }
-//         }
-//   }
-    post{
+        post{
         always{
             echo 'Executing always...'
         }
@@ -103,4 +81,6 @@ pipeline {
         failure{
             echo 'Executing failure'
         }
+    }
+    }
 }
